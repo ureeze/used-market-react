@@ -1,0 +1,20 @@
+#book-img{
+    text-align: center;
+}
+#wirte-post-title{
+    text-align: center;
+    margin-left: 32px;
+    margin-right: 32px;
+}
+.post{
+    margin-top: 50px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 50px;
+}
+.write-post{
+    margin : 30px;
+}
+.select-option{
+    text-align: center;
+}
