@@ -14,14 +14,21 @@ function List() {
 
   const [posts, setPosts] = useState([]);
   const getBookList = async () => {
-    const response = await (
-      await fetch(`http://localhost:8080/posts/all`, {
+    try {
+      const response = await fetch(`http://localhost:8080/posts/all`, {
         method: "GET",
         headers: headers,
-      })
-    ).json();
-    console.log(response);
-    setPosts(response);
+      });
+      const json = await response.json();
+      console.log(response);
+      if (!response.ok) {
+        throw Error("오류가 발생하였습니다.");
+      } else {
+        setPosts(json);
+      }
+    } catch (e) {
+      alert(e);
+    }
   };
   useEffect(() => {
     getBookList();
@@ -31,7 +38,7 @@ function List() {
     <div className="booklist">
       <Row xs={1} md={2} className="g-4">
         {posts.map((post) => (
-          <PostCard 
+          <PostCard
             key={post.postId}
             id={post.postId}
             postTitle={post.postTitle}
@@ -40,7 +47,7 @@ function List() {
             createdAt={post.createdAt}
             writerId={post.writerId}
             writerName={post.writerName}
-            imgUrl={post.imgUrl}
+            imgUrl={post.book.bookImgUrl}
           />
         ))}
       </Row>

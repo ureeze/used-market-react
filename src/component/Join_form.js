@@ -25,7 +25,7 @@ function Join_form() {
     if (email === "") {
       alert("[Email]이 빈칸입니다.");
       return;
-    } 
+    }
     if (userName === "") {
       alert("[이름]이 빈칸입니다.");
       return;
@@ -44,21 +44,25 @@ function Join_form() {
   };
 
   const sendRequest = async (data) => {
-    const response = await fetch("http://localhost:8080/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const json = await response.json();
-    console.log(response);
-    console.log(json);
-    if (!response.ok) {
-      alert("가입 실패");
-    } else {
-      alert("가입 성공");
-      window.location.href = "/";
+    try {
+      const response = await fetch("http://localhost:8080/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const json = await response.json();
+      console.log(response);
+      console.log(json);
+      if (!response.ok) {
+        throw Error("가입 실패");
+      } else {
+        alert("가입 성공");
+        window.location.href = "/";
+      }
+    } catch (e) {
+      alert(e);
     }
   };
 

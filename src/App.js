@@ -5,7 +5,8 @@ import List from "./component/List.js";
 import Navicationbar from "./component/Navicationbar.js";
 import Read_Post from "./component/Read_Post.js";
 import Write_Post from "./component/Write_Post.js";
-import Order from "./component/Order.js";
+import Update_Post from "./component/Update_Post.js";
+import Order_Form from "./component/Order_Form.js";
 import Order_Confirm from "./component/Order_Confirm.js";
 import My_Order from "./component/My_Order.js";
 import Order_Details from "./component/Order_Details.js"; 
@@ -20,8 +21,10 @@ function App() {
   console.log("app_token");
   const token = sessionStorage.getItem("token");
   if (token && token !== null) {
+    console.log("login");
     login = true; 
   } else {
+    console.log("log out");
     login = false; 
     sessionStorage.clear();
   }
@@ -36,7 +39,8 @@ function App() {
         <Route path="/list" element={<List />} />
         <Route path="/posts/:id" element={<Read_Post />} />
         <Route path="/write-post" element={<Write_Post />} />
-        <Route path="/order_page/:postId" element={<Order />} />
+        <Route path="/update_post/:postId" element={<Update_Post />} />
+        <Route path="/order_page/:postId" element={<Order_Form />} />
         <Route path="/order_confirm" element={<Order_Confirm />} />
         <Route path="/mypage/orders" element={<My_Order />} />
         <Route path="/mypage/orders/:id" element={<Order_Details />} /> 

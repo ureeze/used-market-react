@@ -4,15 +4,23 @@ import { Link } from "react-router-dom";
 
 function Main() {
   const request = async () => {
-    const response = await fetch(
-      "http://localhost:8080/oauth2/authorization/google",
-      {
-        method: "GET",
-        mode: "cors",
+    try {
+      const response = await fetch(
+        "http://localhost:8080/oauth2/authorization/google",
+        {
+          method: "GET",
+          mode: "cors",
+        }
+      );
+      const json = await response.json();
+      if (!response.ok) {
+        throw Error("오류가 발생하였습니다.");
+      } else {
+        alert(json);
       }
-    );
-    const json = await response.json();
-    alert(json);
+    } catch (e) {
+      alert(e);
+    }
   };
   return (
     <Card className="login">

@@ -11,9 +11,9 @@ import {
   Button,
 } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import "./Order.css";
+import "./Order_Form.css";
 
-const Order = ({history}) => {
+const Order_Form = () => {
   const [order, serOrder] = useState(useLocation().state);
 
   const [orderDetails, setOrderDetails] = useState({
@@ -32,19 +32,19 @@ const Order = ({history}) => {
 
   const sendRequest = async (requestData) => {
     try {
-      if (recipient === "" || address === "" || phone === "") {
-        alert("배송 정보를 작성해주세요");
-        return;
-      }
-      const requestData = { ...orderDetails, ...order };
-
-      let headers = new Headers({
-        "Content-Type": "application/json",
-      });
-      const token = sessionStorage.getItem("token");
-      if (token && token !== null) {
-        headers.append("Authorization", "Bearer " + token);
-      }
+    if (recipient === "" || address === "" || phone === "") {
+      alert("배송 정보를 작성해주세요");
+      return;
+    }
+    const requestData = { ...orderDetails, ...order };
+    
+    let headers = new Headers({
+      "Content-Type": "application/json",
+    });
+    const token = sessionStorage.getItem("token");
+    if (token && token !== null) {
+      headers.append("Authorization", "Bearer " + token);
+    }
 
       const response = await fetch(`http://localhost:8080/orders`, {
         method: "POST",
@@ -53,9 +53,8 @@ const Order = ({history}) => {
       });
 
       const json = await response.json();
-      if (!response.ok) {
-        console.log("오류");
-        console.log(response);
+      if (!response.ok) { 
+        console.log(json);
         throw Error("주문 시 오류가 발생하였습니다.");
       } else {
         console.log("주문이 완료되었습니다.");
@@ -64,10 +63,7 @@ const Order = ({history}) => {
     } catch (e) {
       alert(e);
     }
-  };
-  console.log(111);
- 
-  
+  }; 
 
   return (
     <div className="post">
@@ -80,8 +76,19 @@ const Order = ({history}) => {
               </Form.Label>
             </div>
             <div className="form1">
-              <Row xs={1} md={2} className="g-4">
-                <Col>
+              <Row
+                xs={1}
+                md={2}
+                className="g-4"
+                style={{
+                  margin: "0px",
+                }}
+              >
+                <Col
+                  style={{
+                    paddingLeft: "0px",
+                  }}
+                >
                   <Form.Control
                     type="text"
                     placeholder="주문자 명"
@@ -90,7 +97,11 @@ const Order = ({history}) => {
                   />
                 </Col>
 
-                <Col>
+                <Col
+                  style={{
+                    paddingRight: "0px",
+                  }}
+                >
                   <Form.Control
                     type="text"
                     placeholder="연락처"
@@ -116,7 +127,7 @@ const Order = ({history}) => {
             </div>
 
             <div className="form1">
-              <Row   className="align-items-center">
+              <Row className="align-items-center">
                 <Col sm={4}>
                   <div id="book-img">
                     <Figure>
@@ -151,7 +162,7 @@ const Order = ({history}) => {
                     </Col>
                     <Col xs="auto" className="my-1">
                       <InputGroup>
-                      <InputGroup.Text>수량</InputGroup.Text>
+                        <InputGroup.Text>수량</InputGroup.Text>
                         <Form.Control
                           className="text-right"
                           size="sm"
@@ -165,7 +176,7 @@ const Order = ({history}) => {
                     </Col>
                     <Col xs="auto" className="my-1">
                       <InputGroup>
-                      <InputGroup.Text>결제 금액</InputGroup.Text>
+                        <InputGroup.Text>결제 금액</InputGroup.Text>
                         <FormControl
                           readOnly
                           className="text-right"
@@ -206,17 +217,21 @@ const Order = ({history}) => {
               </Row>
             </div>
           </Form>
-        </Card> 
+        </Card>
 
-          <Button id="order-button" style={{
-            marginTop:"5px",
-          }} variant="success" onClick={sendRequest}>
-            주문하기
-          </Button> 
-        
+        <Button
+          id="order-button"
+          style={{
+            marginTop: "5px",
+          }}
+          variant="success"
+          onClick={sendRequest}
+        >
+          주문하기
+        </Button>
       </Row>
     </div>
   );
 };
 
-export default Order;
+export default Order_Form;

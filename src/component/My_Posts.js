@@ -24,13 +24,20 @@ function My_Posts() {
 
   const [posts, setPosts] = useState([]);
   const getOrderList = async () => {
-    const response = await (
-      await fetch(`http://localhost:8080/posts/me`, {
+    try {
+      const response = await fetch(`http://localhost:8080/posts/me`, {
         method: "GET",
         headers: headers,
-      })
-    ).json();
-    setPosts(response);
+      });
+      const json = await response.json();
+      if (!response.ok) {
+        throw Error("오류가 발생하였습니다.");
+      } else {
+        setPosts(json);
+      }
+    } catch (e) {
+      alert(e);
+    }
   };
   useEffect(() => {
     console.log("서버에서 POST 목록을 가져옴.");
@@ -55,7 +62,8 @@ function My_Posts() {
             <Card style={{ width: "18rem", margin: "10px" }} key={post.postId}>
               <Card.Img
                 variant="top"
-                src={post.imgUrl}
+                src={post.book.bookImgUrl}
+                loading="lazy"
                 style={{
                   marginTop: "10px",
                 }}
@@ -64,19 +72,24 @@ function My_Posts() {
                 <Card.Title>
                   <h6>NO.{post.postId}</h6> <h4>{post.postTitle}</h4>
                 </Card.Title>
+
+                <Card.Text> {post.book.bookTitle}</Card.Text>
                 <Card.Text
                   style={{
                     marginBottom: "0px",
                   }}
                 >
-                  책 제목 : {post.bookTitle}
+                  재고 : {post.book.stock}
                 </Card.Text>
-                <Card.Text
-                  style={{
-                    marginBottom: "0px",
-                  }}
-                >
-                  재고 : {post.stock}
+                <Card.Text style={{ color: "red", marginBottom: "0px" }}>
+                  POST 상태 :{" "}
+                  {post.postStatus === "SELL" ? (
+                    <Badge bg="warning">Sell</Badge>
+                  ) : post.postStatus === "SOLD_OUT" ? (
+                    <Badge bg="secondary">SOLD_OUT</Badge>
+                  ) : (
+                    <Badge bg="danger">DELETED</Badge>
+                  )}
                 </Card.Text>
                 <Card.Text
                   style={{
@@ -84,14 +97,6 @@ function My_Posts() {
                   }}
                 >
                   작성일자 : {post.createdAt}
-                </Card.Text>
-                <Card.Text style={{ color: "red" }}>
-                  POST 상태 :{" "}
-                  {post.postStatus === "SELL" ? (
-                    <Badge bg="warning">Sell</Badge>
-                  ) : (
-                    <Badge bg="secondary">SOLD_OUT</Badge>
-                  )}
                 </Card.Text>
               </Card.Body>
               <Link

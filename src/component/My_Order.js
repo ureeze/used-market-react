@@ -23,16 +23,23 @@ function My_Order() {
 
   const [orders, setOrders] = useState([]);
   const getOrderList = async () => {
-    const response = await (
-      await fetch(`http://localhost:8080/orders/all/me`, {
+    try {
+      const response = await fetch(`http://localhost:8080/orders/all/me`, {
         method: "GET",
         headers: headers,
-      })
-    ).json();
-    setOrders(response);
+      });
+      const json = await response.json();
+      if(!response.ok){
+        throw Error("오류가 발생하였습니다.");
+      }else{
+        setOrders(json);
+      }
+    } catch (e) {
+      alert(e);
+    }
   };
   useEffect(() => {
-    console.log("서버에서 ORDER 가져옴.")
+    console.log("서버에서 ORDER 가져옴.");
     getOrderList();
   }, []);
   console.log(orders);
@@ -73,10 +80,16 @@ function My_Order() {
                 >
                   수량 : {order.bookAmount}
                 </Card.Text>
-                <Card.Text style={{
-                  marginBottom:"0px"
-                }}>주문일자 : {order.createdAt}</Card.Text>
-                <Card.Text style={{color:"red"}}>주문상태 : {order.deliveryStatus}</Card.Text>
+                <Card.Text
+                  style={{
+                    marginBottom: "0px",
+                  }}
+                >
+                  주문일자 : {order.createdAt}
+                </Card.Text>
+                <Card.Text style={{ color: "red" }}>
+                  주문상태 : {order.deliveryStatus}
+                </Card.Text>
               </Card.Body>
               <Link
                 to={`/mypage/orders/${order.orderId}`}
@@ -87,9 +100,8 @@ function My_Order() {
                   color: "black",
                 }}
               >
-                <Button style={{width:"100%"}}>상세 보기</Button>
+                <Button style={{ width: "100%" }}>상세 보기</Button>
               </Link>
-               
             </Card>
           ))}
         </Row>

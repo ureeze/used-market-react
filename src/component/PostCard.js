@@ -49,7 +49,7 @@ function PostCard({
 
           <Card.Body>
             <Row>
-              <Col sm={3}>
+              <Col sm={4}>
                 <Card.Img
                   src={imgUrl}
                   loading="lazy"
@@ -57,7 +57,7 @@ function PostCard({
                   height="180"
                 />
               </Col>
-              <Col sm={9}>
+              <Col sm={8}>
                 <Card.Text
                   style={{
                     display: "none",

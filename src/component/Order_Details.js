@@ -23,18 +23,27 @@ function Order_Details() {
   }
 
   const cancel = async () => {
-    const response = await fetch(
-      `http://localhost:8080/orders/${orderDetails.orderId}`,
-      {
-        method: "DELETE",
-        headers: headers,
+    try {
+      const response = await fetch(
+        `http://localhost:8080/orders/${orderDetails.orderId}`,
+        {
+          method: "DELETE",
+          headers: headers,
+        }
+      );
+      const json = await response.json();
+      console.log(response);
+      console.log(json);
+
+      if (!response.ok) {
+        throw Error("오류가 발생하였습니다.");
+      } else {
+        alert("주문 취소가 완료되었습니다.");
+        window.location.href = "/mypage/orders";
       }
-    );
-    const json = await response.json();
-    console.log(response);
-    console.log(json);
-    alert("주문 취소가 완료되었습니다.");
-    window.location.href = "/mypage/orders";
+    } catch (e) {
+      alert(e);
+    }
   };
 
   const cancelHandler = () => {
@@ -58,7 +67,7 @@ function Order_Details() {
             </div>
             <hr></hr>
             <div className="form1">
-              <Row  className="align-items-center">
+              <Row className="align-items-center">
                 <Col sm={4}>
                   <div id="book-img">
                     <Figure>
@@ -154,7 +163,7 @@ function Order_Details() {
                           disabled
                           style={{
                             backgroundColor: "white",
-                            color:"red"
+                            color: "red",
                           }}
                         />
                       </InputGroup>

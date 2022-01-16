@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Col,
   Row,
@@ -9,18 +9,25 @@ import {
   FormControl,
   Image,
 } from "react-bootstrap";
-import "./Write_Post.css";
+import { useParams, useLocation } from "react-router-dom"; 
 
-function Write_Post() {
+function Update_Post() {
+  useEffect(()=>{
+    console.log("useEffect");
+
+  },[]);
   const [inputs, setInputs] = useState({
-    postTitle: "",
-    postContent: "",
-    bookTitle: "",
-    bookCategory: "",
-    bookStatus: "",
-    stock: 0,
-    unitPrice: 0,
+    postTitle: useLocation().state.updatedPost.postTitle,
+    postContent: useLocation().state.updatedPost.postContent,
+    bookTitle: useLocation().state.updatedPost.book.bookTitle,
+    bookCategory: useLocation().state.updatedPost.book.bookCategory,
+    bookStatus: useLocation().state.updatedPost.book.bookStatus,
+    stock: useLocation().state.updatedPost.book.stock,
+    unitPrice: useLocation().state.updatedPost.book.unitPrice,
+    bookImgUrl: useLocation().state.updatedPost.book.bookImgUrl,
   });
+  console.log(inputs);
+  const { postId } = useParams();
 
   const {
     postTitle,
@@ -30,24 +37,34 @@ function Write_Post() {
     bookStatus,
     stock,
     unitPrice,
+    bookImgUrl
   } = inputs;
+  
 
-  const onChange = (event) => {
-    const { name, value } = event.target;
-    let inputValue;
-    if (name === "stock" || name === "unitPrice") {
-      inputValue = parseInt(value);
-    } else {
-      inputValue = value;
+  const onNumChange = (event) => {
+    
+    if(event.target.value<=0){
+      alert("0보다 작을 수 없습니다.");
+      return;
     }
 
     setInputs({
       ...inputs,
-      [name]: inputValue,
+      [event.target.name]: event.target.value,
+    });
+
+  }
+
+   const onChange = (event) => {
+    const { name, value } = event.target;
+    
+    setInputs({
+      ...inputs,
+      [name]: value,
     });
   };
 
-  const save_post = async () => {
+  const update_post = async () => {
     let headers = new Headers({
       "Content-Type": "application/json",
     });
@@ -55,26 +72,27 @@ function Write_Post() {
     if (token && token !== null) {
       headers.append("Authorization", "Bearer " + token);
     }
-
+    
     try {
-      const response = await fetch(`http://localhost:8080/posts`, {
-        method: "POST",
+      const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+        method: "PUT",
         headers: headers,
         body: JSON.stringify(inputs),
       });
-      const json = await response.json();
+      const json = await response.json(); 
       console.log(json);
 
       if (!response.ok) {
-        throw Error("포스트 작성에 실패하였습니다.");
+        throw Error("포스트 수정에 실패하였습니다.");
       } else {
-        alert("작성하신 포스트가 등록 되었습니다.");
+        alert("포스트가 수정 되었습니다.");
         window.location.href = "/list";
       }
     } catch (e) {
       alert(e);
     }
   };
+
 
   const onClick = () => {
     console.log(inputs);
@@ -87,10 +105,10 @@ function Write_Post() {
     } else if (bookTitle.length === 0) {
       alert("도서 명을 작성해 주시기 바랍니다.");
       return;
-    } else if (stock === 0) {
+    } else if (stock <= 0) {
       alert("재고 수량은 1권 이상이어야 합니다.");
       return;
-    } else if (unitPrice === 0) {
+    } else if (unitPrice <= 0) {
       alert("금액을 설정 해주시기 바랍니다.");
       return;
     } else if (bookCategory.length === 0) {
@@ -100,8 +118,9 @@ function Write_Post() {
       alert("책의 상태를 지정 해주시기 바랍니다.");
       return;
     }
-    save_post();
+    update_post();
   };
+
 
   return (
     <div className="post">
@@ -110,7 +129,7 @@ function Write_Post() {
           <Form>
             <div className="write-post" id="wirte-post-title">
               <Form.Label>
-                <h2>판매 포스트 작성</h2>
+                <h2>포스트 수정</h2>
               </Form.Label>
               <hr></hr>
               <Form.Group className="mb-3">
@@ -119,6 +138,7 @@ function Write_Post() {
                   type="text"
                   placeholder="글 제목을 입력하세요"
                   name="postTitle"
+                  value={postTitle}
                   onChange={onChange}
                 />
               </Form.Group>
@@ -132,7 +152,8 @@ function Write_Post() {
                       width="171"
                       height="180"
                       alt="이미지"
-                      src="https://react-bootstrap-v3.netlify.app/thumbnail.png"
+                      src={bookImgUrl}
+                      disabled
                     />
                   </div>
                 </Col>
@@ -147,7 +168,8 @@ function Write_Post() {
                           type="text"
                           name="bookTitle"
                           placeholder="도서 이름"
-                          onChange={onChange}
+                          value={bookTitle} 
+                          disabled
                         />
                       </InputGroup>
                     </Col>
@@ -160,7 +182,8 @@ function Write_Post() {
                           aria-label="Amount (to the nearest dollar)"
                           type="number"
                           name="stock"
-                          onChange={onChange}
+                          value={stock}
+                          onChange={onNumChange}
                         />
                         <InputGroup.Text>권</InputGroup.Text>
                       </InputGroup>
@@ -174,7 +197,8 @@ function Write_Post() {
                           type="number"
                           aria-label="Amount (to the nearest dollar)"
                           name="unitPrice"
-                          onChange={onChange}
+                          value={unitPrice}
+                          onChange={onNumChange}
                         />
                         <InputGroup.Text>원</InputGroup.Text>
                       </InputGroup>
@@ -185,6 +209,7 @@ function Write_Post() {
                         <Form.Select
                           id="category"
                           name="bookCategory"
+                          value={bookCategory}
                           onChange={onChange}
                         >
                           <option className="select-option">
@@ -229,6 +254,7 @@ function Write_Post() {
                         <Form.Select
                           id="inlineFormCustomSelect"
                           name="bookStatus"
+                          value={bookStatus}
                           onChange={onChange}
                         >
                           <option className="select-option">
@@ -267,6 +293,7 @@ function Write_Post() {
                   placeholder=" 판매 할 도서의 상세 내용을 입력해주세요."
                   name="postContent"
                   onChange={onChange}
+                  value={postContent}
                   style={{
                     padding: "10px",
                   }}
@@ -284,11 +311,11 @@ function Write_Post() {
           variant="primary"
           onClick={onClick}
         >
-          판매 등록하기
+          수정하기
         </Button>
       </Row>
     </div>
   );
 }
 
-export default Write_Post;
+export default Update_Post;

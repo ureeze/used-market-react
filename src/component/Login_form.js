@@ -22,6 +22,7 @@ function Login_form() {
   };
 
   const sendRequest = async (data) => {
+    try{
     const response = await fetch("http://localhost:8080/auth/login", {
       method: "POST",
       headers: {
@@ -31,12 +32,15 @@ function Login_form() {
     });
     const json = await response.json();
     if (!response.ok) {
-      alert("로그인에 실패하였습니다.");
+      throw Error("로그인에 실패하였습니다.");
     } else {
       console.log(json.token);
       sessionStorage.setItem("token", json.token);
       window.location.href = "/list";
     }
+  }catch(e){
+    alert(e);
+  }
   };
 
   return (

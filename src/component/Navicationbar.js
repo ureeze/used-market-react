@@ -16,7 +16,7 @@ function Navicationbar({ login }) {
 
   const onChange = (event) => {
     setSearchWord(event.target.value);
-  }; 
+  };
 
   const onLogout = () => {
     sessionStorage.clear();
@@ -57,12 +57,17 @@ function Navicationbar({ login }) {
                 </Link>
               </Nav>
               <Form className="d-flex">
+                <Form.Select size="sm" style={{width:"100px",marginRight:"10px"}} > 
+                  <option value="book">책</option>
+                  <option value="post">포스트</option> 
+                </Form.Select>
                 <FormControl
                   type="search"
                   placeholder="도서 검색"
                   className="me-2"
                   aria-label="Search"
                   onChange={onChange}
+                
                 />
                 <Link to={`/books/search`} state={searchWord}>
                   <Button variant="success">Search</Button>

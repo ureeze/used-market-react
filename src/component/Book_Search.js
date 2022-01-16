@@ -25,13 +25,23 @@ function Book_Search() {
 
   const [books, setBooks] = useState([]);
   const getSearchBooks = async (word) => {
-    const response = await (
-      await fetch(`http://localhost:8080/books/all/title?bookTitle=` + word, {
-        method: "GET",
-        headers: headers,
-      })
-    ).json();
-    setBooks(response);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/books/all/title?bookTitle=` + word,
+        {
+          method: "GET",
+          headers: headers,
+        }
+      );
+      const json = await response.json();
+      if (!response.ok) {
+        throw Error("오류가 발생하였습니다.");
+      } else {
+        setBooks(json);
+      }
+    } catch (e) {
+      alert(e);
+    }
   };
 
   const word = useLocation().state;
