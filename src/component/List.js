@@ -20,7 +20,7 @@ function List() {
         headers: headers,
       });
       const json = await response.json();
-      console.log(response);
+      console.log(json);
       if (!response.ok) {
         throw Error("오류가 발생하였습니다.");
       } else {

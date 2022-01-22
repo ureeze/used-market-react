@@ -93,7 +93,7 @@ function Read_Post() {
     } catch (e) {
       alert(e);
     }
-  }; 
+  };
   useEffect(() => {
     getPost();
   }, []);
@@ -211,31 +211,33 @@ function Read_Post() {
                       </InputGroup>
                     </Col>
                     <Col xs="auto" className="my-1">
-                        {updatedPost.postStatus === "SELL" ? (
-                      <InputGroup>
-                        <InputGroup.Text>수량</InputGroup.Text>
-                           
-                            <Form.Control
-                              className="text-right"
-                              size="sm"
-                              type="number"
-                              placeholder="권"
-                              name="bookAmount"
-                              value={options.bookAmount}
-                              onChange={bookAmountChange}
-                            />
-                            <InputGroup.Text>권</InputGroup.Text>
-                           
-                        <InputGroup.Text>
-                          재고수량 : {updatedPost.book.stock}
-                        </InputGroup.Text>
-                      </InputGroup>
-                      ) : <InputGroup>
-                      <InputGroup.Text>수량</InputGroup.Text> 
-                      <InputGroup.Text>
-                        재고수량 : {updatedPost.book.stock}
-                      </InputGroup.Text>
-                    </InputGroup>}
+                      {updatedPost.postStatus === "SELL" ? (
+                        <InputGroup>
+                          <InputGroup.Text>수량</InputGroup.Text>
+
+                          <Form.Control
+                            className="text-right"
+                            size="sm"
+                            type="number"
+                            placeholder="권"
+                            name="bookAmount"
+                            value={options.bookAmount}
+                            onChange={bookAmountChange}
+                          />
+                          <InputGroup.Text>권</InputGroup.Text>
+
+                          <InputGroup.Text>
+                            재고수량 : {updatedPost.book.stock}
+                          </InputGroup.Text>
+                        </InputGroup>
+                      ) : (
+                        <InputGroup>
+                          <InputGroup.Text>수량</InputGroup.Text>
+                          <InputGroup.Text>
+                            재고수량 : {updatedPost.book.stock}
+                          </InputGroup.Text>
+                        </InputGroup>
+                      )}
                     </Col>
                     <Col xs="auto" className="my-1">
                       <InputGroup>
@@ -356,6 +358,15 @@ function Read_Post() {
             재고가 존재하지 않습니다.
           </Button>
         )}
+        <Link
+          to={`/posts/chat`}
+          state={{
+            postId: updatedPost.postId,
+            writerId: updatedPost.writerId,
+          }}
+        >
+          <Button>채팅</Button>
+        </Link>
       </Row>
     </div>
   );

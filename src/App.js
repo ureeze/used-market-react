@@ -12,6 +12,7 @@ import My_Order from "./component/My_Order.js";
 import Order_Details from "./component/Order_Details.js"; 
 import My_Posts from "./component/My_Posts.js";
 import Book_Search from "./component/Book_Search.js";
+import ChatRoom from "./component/ChatRoom.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -46,6 +47,7 @@ function App() {
         <Route path="/mypage/orders/:id" element={<Order_Details />} /> 
         <Route path="/mypage/posts" element={<My_Posts />} /> 
         <Route path="/books/search" element={<Book_Search />} />
+        <Route path="/posts/chat" element={<ChatRoom />} />
       </Routes>
     </BrowserRouter>
   );
