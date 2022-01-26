@@ -10,22 +10,59 @@ import {
   Badge,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useParams, Link, useLocation } from "react-router-dom"; 
+import { useParams, Link, useLocation } from "react-router-dom";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
+import { TalkBox } from "react-talk";
 
 function ChatRoom() {
   const [input, setInput] = useState("");
-  const [chatInfo, setChatInfo] = useState(); 
+  const [chatInfo, setChatInfo] = useState();
+
   const location = useLocation();
   const onChange = (event) => {
     setInput(event.target.value);
   };
 
-  const onClick = () => {
-    alert("전송");
-     
-  };
+  var socket = new SockJS("http://localhost:8080/ws");
+  var stompClient = Stomp.over(socket);
 
-  
+  function chatHandShaking() {
+    const headers = {
+      // connect, subscribe에 쓰이는 headers
+    };
+
+    stompClient.connect({}, function (frame) {
+      console.log("Connected: " + frame);
+      stompClient.subscribe("/topic/greetings", function (greeting) {
+        // console.log(JSON.parse(greeting.body).content);
+        console.log(JSON.parse(greeting.body));
+      });
+    });
+  }
+
+  function sendName() {
+    stompClient.send(
+      "/app/hello",
+      {},
+      JSON.stringify({ name: "park", message: input })
+    );
+  }
+
+  function disConnect() {
+    if (stompClient !== null) {
+      const headers = {
+        // disconnect에 쓰이는 headers
+      };
+      stompClient.disconnect(function () {
+        // disconnect 후 실행하는 곳
+      }, headers);
+    }
+  }
+
+  const inputChange = (e) => {
+    setInput(e.target.value);
+  };
 
   const create = async (location) => {
     let headers = new Headers({
@@ -61,39 +98,21 @@ function ChatRoom() {
 
   useEffect(() => {
     create(location);
+    chatHandShaking();
   }, []);
 
   return (
     <div className="post">
       <Row xs={1} md={1} className="g-4">
-        <Card>
-          <Form>
-            <div id="title">
-              <Form.Label>
-                <h1>채팅</h1>
-              </Form.Label>
-            </div>
-          </Form>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>#</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-              </tr>
-            </tbody>
-          </Table>
-        </Card>
-        <Form.Control
-          type="text"
-          onChange={onChange}
-          placeholder="주문자 명"
-          name="recipient"
-        />
-        <Button onClick={onClick}>전송</Button>
+        {/* <TalkBox
+          topic="react-websocket-template"
+          currentUserId="ping"
+          currentUser="Pinger"
+          
+        /> */}
+
+        <FormControl onChange={inputChange} />
+        <Button onClick={sendName}>sendName</Button>
       </Row>
     </div>
   );
