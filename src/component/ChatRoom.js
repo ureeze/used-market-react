@@ -11,13 +11,17 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { TalkBox } from "react-talk";
 
 function ChatRoom() {
   const [input, setInput] = useState("");
   const [chatInfo, setChatInfo] = useState();
+
+  const chatLog = useSelector((state) => state.message); 
+  console.log(chatLog);
 
   const location = useLocation();
   const onChange = (event) => {
@@ -26,26 +30,28 @@ function ChatRoom() {
 
   var socket = new SockJS("http://localhost:8080/ws");
   var stompClient = Stomp.over(socket);
+  const dispatch = useDispatch();
 
-  function chatHandShaking() {
+  function chatHandShaking(roomId) {
     const headers = {
       // connect, subscribe에 쓰이는 headers
     };
 
-    stompClient.connect({}, function (frame) {
+    stompClient.connect('guest','guest', function (frame) {
       console.log("Connected: " + frame);
-      stompClient.subscribe("/topic/greetings", function (greeting) {
-        // console.log(JSON.parse(greeting.body).content);
-        console.log(JSON.parse(greeting.body));
+      stompClient.subscribe("/topic/room.1" , (response) => {
+        const message = JSON.parse(response.body);
+        console.log(message);
+        dispatch({ type: "NEW_MESSAGE", payload: message });
       });
     });
   }
 
   function sendName() {
     stompClient.send(
-      "/app/hello",
+      `/pub/chat`,
       {},
-      JSON.stringify({ name: "park", message: input })
+      JSON.stringify({ name: chatInfo.currentUserName, message: input })
     );
   }
 
@@ -89,7 +95,7 @@ function ChatRoom() {
       } else {
         console.info(json);
         setChatInfo(json);
-        alert("채팅이 시작 되었습니다.");
+        return json;
       }
     } catch (e) {
       alert(e);
@@ -97,22 +103,16 @@ function ChatRoom() {
   };
 
   useEffect(() => {
-    create(location);
-    chatHandShaking();
+    const roomId = create(location);
+    chatHandShaking(roomId);
   }, []);
 
   return (
     <div className="post">
-      <Row xs={1} md={1} className="g-4">
-        {/* <TalkBox
-          topic="react-websocket-template"
-          currentUserId="ping"
-          currentUser="Pinger"
-          
-        /> */}
+      <Row xs={1} md={1} className="g-4"> 
 
-        <FormControl onChange={inputChange} />
-        <Button onClick={sendName}>sendName</Button>
+        <FormControl onChange={inputChange}   />
+        <Button onClick={sendName}>채팅 보내기</Button>
       </Row>
     </div>
   );
