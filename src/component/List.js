@@ -1,57 +1,91 @@
-import { Col, Row, Card } from "react-bootstrap";
+import { Col, Row, ButtonToolbar, ButtonGroup, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import "./List.css";
 import PostCard from "./PostCard.js";
-
+import NavicationBar from "./NavicationBar.js";
 function List() {
-  let headers = new Headers({
-    "Content-Type": "application/json",
+  const size = 20;
+  const [result, setResult] = useState({
+    posts: [],
+    totalPages: "",
+    totalElements: "",
+    size: "",
   });
-  const token = sessionStorage.getItem("token");
-  if (token && token !== null) {
-    headers.append("Authorization", "Bearer " + token);
-  }
 
-  const [posts, setPosts] = useState([]);
-  const getBookList = async () => {
+  const getBookList = async (page, size) => {
+    let headers = new Headers({
+      "Content-Type": "application/json",
+    });
+    const token = sessionStorage.getItem("token");
+    if (token && token !== null) {
+      headers.append("Authorization", "Bearer " + token);
+    }
     try {
-      const response = await fetch(`http://localhost:8080/posts/all`, {
-        method: "GET",
-        headers: headers,
-      });
+      const response = await fetch(
+        `http://localhost:8080/posts/all?page=` + page + `&size=` + size,
+        {
+          method: "GET",
+          headers: headers,
+        }
+      );
       const json = await response.json();
       console.log(json);
       if (!response.ok) {
         throw Error("오류가 발생하였습니다.");
       } else {
-        setPosts(json);
+        setResult({
+          posts: json.content,
+          totalPages: json.totalPages,
+          totalElements: json.totalElements,
+          size: json.size,
+        });
       }
     } catch (e) {
       alert(e);
     }
   };
+
+  const pageButton = () => {
+    const pageButtonList = [];
+    for (let i = 1; i <= result.totalPages; i++) {
+      pageButtonList.push(
+        <Button
+          onClick={() => {
+            getBookList(i - 1, size);
+          }}
+          key={i}
+        >
+          {i}
+        </Button>
+      );
+    }
+    return pageButtonList;
+  };
+
   useEffect(() => {
     getBookList();
   }, []);
 
   return (
-    <div className="booklist">
-      <Row xs={1} md={2} className="g-4">
-        {posts.map((post) => (
-          <PostCard
-            key={post.postId}
-            id={post.postId}
-            postTitle={post.postTitle}
-            postStatus={post.postStatus}
-            postContent={post.postContent}
-            createdAt={post.createdAt}
-            writerId={post.writerId}
-            writerName={post.writerName}
-            imgUrl={post.book.bookImgUrl}
-          />
-        ))}
+    <>
+      <NavicationBar />
+      <Row>
+        <Col></Col>
+        <Col xs={9}>
+          <Row xs={1} md={2} className="g-4">
+            <PostCard list={result.posts} />
+            <ButtonToolbar
+              style={{ marginBottom: "20px" }}
+              aria-label="Toolbar with button groups"
+            >
+              <ButtonGroup className="me-2" aria-label="First group">
+                {pageButton()}
+              </ButtonGroup>
+            </ButtonToolbar>
+          </Row>
+        </Col>
+        <Col></Col>
       </Row>
-    </div>
+    </>
   );
 }
 

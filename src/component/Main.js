@@ -1,5 +1,4 @@
-import { Card, Button } from "react-bootstrap";
-import "./Main.css";
+import { Card, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function Main() {
@@ -23,37 +22,78 @@ function Main() {
     }
   };
   return (
-    <Card className="login">
-      <Card.Body>
-        <Card.Title>
-          <div>
-            <h1>도서 중고마켓</h1>
-          </div>
-          <div>Book Used Market</div>
-          <br />
-        </Card.Title>
+    <Row>
+      <Col></Col>
+      <Col xs={7}>
+        <Card style={loginForm}>
+          <Card.Body>
+            <Card.Title>
+              <h1>도서 중고마켓</h1>
+              <h5>Book Used Market</h5>
+              <br />
+            </Card.Title>
+            <Row>
+              <Link to={`/signup`} style={loginButton}>
+                <Button style={joinButton}>회원가입</Button>
+              </Link>
+            </Row>
+            <Row>
+              <Link to={`/login`} style={loginButton}>
+                <Button style={basic}>로그인</Button>
+              </Link>
+            </Row>
 
-        <Link to={`/signup`}>
-          <div className="login-button">
-            <Button id="join-button">회원가입</Button>
-          </div>
-        </Link>
-        <Link to={`/login`}>
-          <div className="login-button">
-            <Button id="basic">로그인</Button>
-          </div>
-        </Link>
+            <Row style={loginButton}>
+              <Link to={`/`}>
+                <Button style={google}>Google 로그인</Button>
+              </Link>
+            </Row>
 
-        <div className="login-button" onClick={request}>
-          <Button id="google">Google 로그인</Button>
-        </div>
-
-        <div className="login-button">
-          <Button id="naver">NAVER 로그인</Button>
-        </div>
-      </Card.Body>
-    </Card>
+            <Row style={loginButton}>
+              <Link to={`/`}>
+                <Button style={naver}>NAVER 로그인</Button>
+              </Link>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Col>
+      <Col></Col>
+    </Row>
   );
 }
 
 export default Main;
+
+const loginButton = {
+  marginBottom: "10px",
+};
+const joinButton = {
+  backgroundColor: "red",
+  borderColor: "red",
+  width: "30%",
+};
+const basic = {
+  backgroundColor: "#ffc400de",
+  borderColor: "#ffc400de",
+  width: "30%",
+};
+const google = {
+  backgroundColor: "#4285f4",
+  borderColor: "#4285f4",
+  width: "30%",
+};
+const naver = {
+  backgroundColor: "#00c73c",
+  borderColor: "#00c73c",
+  width: "30%",
+};
+const loginForm = {
+  textAlign: "center",
+  fontWeight: "700",
+  marginTop: "50px",
+  marginLeft: "100px",
+  marginRight: "100px",
+  marginBottom: "50px",
+  borderRadius: "12px",
+  backgroundColor: "#ffffff",
+};

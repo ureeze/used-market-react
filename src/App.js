@@ -1,80 +1,68 @@
 import Main from "./component/Main.js";
-import Login_form from "./component/Login_form.js";
-import Join_form from "./component/Join_form.js";
-import List from "./component/List.js";
-import Navicationbar from "./component/Navicationbar.js";
-import Read_Post from "./component/Read_Post.js";
-import Write_Post from "./component/Write_Post.js";
-import Update_Post from "./component/Update_Post.js";
-import Order_Form from "./component/Order_Form.js";
-import Order_Confirm from "./component/Order_Confirm.js";
-import My_Order from "./component/My_Order.js";
-import Order_Details from "./component/Order_Details.js";
-import My_Posts from "./component/My_Posts.js";
-import Book_Search from "./component/Book_Search.js";
+import LoginForm from "./component/LoginForm.js";
+import JoinForm from "./component/JoinForm.js";
+import List from "./component/List.js"; 
+import ReadPost from "./component/ReadPost.js";
+import WritePost from "./component/WritePost.js";
+import UpdatePost from "./component/UpdatePost.js";
+import OrderForm from "./component/OrderForm.js";
+import OrderConfirm from "./component/OrderConfirm.js";
+import MyOrder from "./component/MyOrder.js";
+import OrderDetails from "./component/OrderDetails.js";
+import MyPosts from "./component/MyPosts.js";
+import Search from "./component/Search.js";
 import ChatRoom from "./component/ChatRoom.js";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Chat from "./component/Chat.js";
+import ChatRooms from "./component/ChatRooms.js";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import rootReducer from "./redux/rootReducer"; 
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
-  let login;
-  token_validation();
+function App() { 
 
-  let initialState = [];
-  const store = createStore(reducer, composeWithDevTools());
+  const store = createStore(rootReducer, composeWithDevTools()); 
 
-  function reducer(state = initialState, action) {
-    if (initialState === undefined) {
-      return {
-        message: 0,
-      };
-    }
-    let newState = [ ...state ];
-    console.log(newState);
-    if (action.type === "NEW_MESSAGE") {
-      return newState.concat(action.payload);
-    }
-    return newState;
-  }
-
-  function token_validation() {
-    console.log("app_token");
-    const token = sessionStorage.getItem("token");
-    if (token && token !== null) {
-      console.log("login");
-      login = true;
-    } else {
-      console.log("log out");
-      login = false;
-      sessionStorage.clear();
-    }
-  }
-
+  // function token_validation() {
+  //   const token = sessionStorage.getItem("token");
+  //   if (token && token !== null) {
+  //     console.log("LogIn");
+  //     setLogin(true);
+  //   } else {
+  //     console.log("LogOut");
+  //     setLogin(false);
+  //     sessionStorage.clear();
+  //   }
+  // }
+ 
   return (
     <Provider store={store}>
+      {/* <PersistGate loading={null} persistor={persistor}> */}
       <BrowserRouter>
-        <Navicationbar login={login} />
+        {/* <NavicationBar login={login} /> */}
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/signup" element={<Join_form />} />
-          <Route path="/login" element={<Login_form />} />
+          <Route path="/signup" element={<JoinForm />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route path="/list" element={<List />} />
-          <Route path="/posts/:id" element={<Read_Post />} />
-          <Route path="/write-post" element={<Write_Post />} />
-          <Route path="/update_post/:postId" element={<Update_Post />} />
-          <Route path="/order_page/:postId" element={<Order_Form />} />
-          <Route path="/order_confirm" element={<Order_Confirm />} />
-          <Route path="/mypage/orders" element={<My_Order />} />
-          <Route path="/mypage/orders/:id" element={<Order_Details />} />
-          <Route path="/mypage/posts" element={<My_Posts />} />
-          <Route path="/books/search" element={<Book_Search />} />
-          <Route path="/posts/chat" element={<ChatRoom />} />
+          <Route path="/posts/:id" element={<ReadPost />} />
+          <Route path="/write-post" element={<WritePost />} />
+          <Route path="/update_post/:postId" element={<UpdatePost />} />
+          <Route path="/order_page/:postId" element={<OrderForm />} />
+          <Route path="/order_confirm" element={<OrderConfirm />} />
+          <Route path="/mypage/orders" element={<MyOrder />} />
+          <Route path="/mypage/orders/:id" element={<OrderDetails />} />
+          <Route path="/mypage/posts" element={<MyPosts />} />
+          <Route path="/search_result" element={<Search />} />
+          <Route path="/posts/chatroom" element={<ChatRoom />} />
+          <Route path="/posts/chat" element={<Chat />} />
+          <Route path="/chatrooms" element={<ChatRooms />} />
         </Routes>
       </BrowserRouter>
+      {/* </PersistGate> */}
     </Provider>
   );
 }
