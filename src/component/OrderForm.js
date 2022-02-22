@@ -17,7 +17,7 @@ import NavicationBar from "./NavicationBar.js";
 const OrderForm = () => {
   const [order, setOrder] = useState(useLocation().state);
   const navigate = useNavigate();
-
+  const baseURL = process.env.REACT_APP_BASE_URL;
   const [orderDetails, setOrderDetails] = useState({
     recipient: "",
     address: "",
@@ -48,7 +48,7 @@ const OrderForm = () => {
         headers.append("Authorization", "Bearer " + token);
       }
 
-      const response = await fetch(`http://localhost:8080/orders`, {
+      const response = await fetch(`${baseURL}/orders`, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(requestData),

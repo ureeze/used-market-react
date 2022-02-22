@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-const DeleteButton = ({postId}) => { 
+const DeleteButton = ({ postId }) => {
   const navigate = useNavigate();
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   const post_delete = async () => {
     let headers = new Headers({
       "Content-Type": "application/json",
@@ -12,7 +14,7 @@ const DeleteButton = ({postId}) => {
       headers.append("Authorization", "Bearer " + token);
     }
     try {
-      const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+      const response = await fetch(`${baseURL}/posts/${postId}`, {
         method: "delete",
         headers: headers,
       });

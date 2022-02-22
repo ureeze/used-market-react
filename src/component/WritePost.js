@@ -23,6 +23,7 @@ function WritePost() {
     unitPrice: 0,
   });
   const navigate = useNavigate();
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   const {
     postTitle,
@@ -59,7 +60,7 @@ function WritePost() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/posts`, {
+      const response = await fetch(`${baseURL}/posts`, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(inputs),

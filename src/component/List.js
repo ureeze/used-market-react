@@ -2,6 +2,7 @@ import { Col, Row, ButtonToolbar, ButtonGroup, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import PostCard from "./PostCard.js";
 import NavicationBar from "./NavicationBar.js";
+
 function List() {
   const size = 20;
   const [result, setResult] = useState({
@@ -10,7 +11,7 @@ function List() {
     totalElements: "",
     size: "",
   });
-
+  const baseURL = process.env.REACT_APP_BASE_URL;
   const getBookList = async (page, size) => {
     let headers = new Headers({
       "Content-Type": "application/json",
@@ -21,7 +22,7 @@ function List() {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/posts/all?page=` + page + `&size=` + size,
+        `${baseURL}/posts/all?page=` + page + `&size=` + size,
         {
           method: "GET",
           headers: headers,

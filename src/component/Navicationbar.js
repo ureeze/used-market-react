@@ -1,22 +1,9 @@
-import {
-  Navbar,
-  Container,
-  Nav,
-  Form,
-  FormControl,
-  Button,
-} from "react-bootstrap";
+import { Navbar, Container, Nav } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Navicationbar() {
   const [current, setCurrent] = useState(true);
-  const [searchWord, setSearchWord] = useState("");
-  const [searchOption, setSearchOption] = useState("books");
-
-  const onChange = (event) => {
-    setSearchWord(event.target.value);
-  };
 
   const onLogout = () => {
     console.log("Logout");
@@ -77,31 +64,6 @@ function Navicationbar() {
                 로그아웃
               </Link>
             </Nav>
-            {/* <Form className="d-flex">
-              <Form.Select
-                size="sm"
-                style={{ width: "100px", marginRight: "10px" }}
-                onChange={(e) => {
-                  setSearchOption(e.target.value);
-                }}
-              >
-                <option value="books">책</option>
-                <option value="posts">포스트</option>
-              </Form.Select>
-              <FormControl
-                type="search"
-                placeholder="검색"
-                className="me-2"
-                aria-label="Search"
-                onChange={onChange}
-              />
-              <Link
-                to={`/search_result`}
-                state={{ searchOption: searchOption, searchWord: searchWord }}
-              >
-                <Button variant="success">Search</Button>
-              </Link>
-            </Form> */}
           </Navbar.Collapse>
         ) : null}
       </Container>

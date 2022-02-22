@@ -14,6 +14,8 @@ function ChatRoom() {
     userName: "",
   });
   const state = useLocation().state;
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   console.log(state);
   console.log(chatRoomState);
   const retrieveChatRoom = async () => {
@@ -26,10 +28,10 @@ function ChatRoom() {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/chatrooms/post/${state.postId}`,
+        `${baseURL}/chatrooms/post/${state.postId}`,
         {
           method: "POST",
-          headers: headers, 
+          headers: headers,
         }
       );
       const chatRoomState = await response.json();

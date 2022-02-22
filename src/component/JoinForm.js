@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Card, Button, Form, Row, Col } from "react-bootstrap";
-import NavicationBar from "./NavicationBar.js";
 import { useNavigate } from "react-router-dom";
 
 function JoinForm() {
@@ -10,6 +9,7 @@ function JoinForm() {
     password: "",
   });
   const { email, userName, password } = joinDetails;
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   const navigate = useNavigate();
   const onChange = (event) => {
@@ -46,7 +46,7 @@ function JoinForm() {
 
   const sendRequest = async (data) => {
     try {
-      const response = await fetch("http://localhost:8080/auth/signup", {
+      const response = await fetch(`${baseURL}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

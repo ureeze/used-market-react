@@ -9,6 +9,8 @@ function ChatRooms() {
     chatRoomBySeller: [],
   });
   const [visiable, setVisiable] = useState(false);
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   console.log(chatRoomList);
 
   const getChatRooms = async () => {
@@ -20,7 +22,7 @@ function ChatRooms() {
       headers.append("Authorization", "Bearer " + token);
     }
     try {
-      const response = await fetch(`http://localhost:8080/chatrooms`, {
+      const response = await fetch(`${baseURL}/chatrooms`, {
         method: "GET",
         headers: headers,
       });

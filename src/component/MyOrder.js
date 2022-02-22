@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import NavicationBar from "./NavicationBar.js";
 
 function MyOrder() {
+  const baseURL = process.env.REACT_APP_BASE_URL;
   let headers = new Headers({
     "Content-Type": "application/json",
   });
@@ -15,7 +16,7 @@ function MyOrder() {
   const [orders, setOrders] = useState([]);
   const getOrderList = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/orders/all/me`, {
+      const response = await fetch(`${baseURL}/orders/all/me`, {
         method: "GET",
         headers: headers,
       });

@@ -15,7 +15,7 @@ import NavicationBar from "./NavicationBar.js";
 
 function OrderDetails() {
   const [orderDetails, setOrderDetails] = useState(useLocation().state);
-
+  const baseURL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
 
   let headers = new Headers({
@@ -29,7 +29,7 @@ function OrderDetails() {
   const cancel = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/orders/${orderDetails.orderId}`,
+        `${baseURL}/orders/${orderDetails.orderId}`,
         {
           method: "DELETE",
           headers: headers,

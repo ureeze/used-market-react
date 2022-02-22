@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import NavicationBar from "./NavicationBar.js";
 
 function MyPosts() {
+  const baseURL = process.env.REACT_APP_BASE_URL;
   let headers = new Headers({
     "Content-Type": "application/json",
   });
@@ -11,11 +12,11 @@ function MyPosts() {
   if (token && token !== null) {
     headers.append("Authorization", "Bearer " + token);
   }
-
   const [posts, setPosts] = useState([]);
+
   const getOrderList = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/posts/me`, {
+      const response = await fetch(`${baseURL}/posts/me`, {
         method: "GET",
         headers: headers,
       });

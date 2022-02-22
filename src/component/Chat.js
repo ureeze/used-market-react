@@ -1,4 +1,4 @@
-import { Col, Row, Button, Table, FormControl } from "react-bootstrap";
+import { Col, Row, Button, FormControl } from "react-bootstrap";
 import { useRef, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,11 +16,12 @@ function Chat() {
 
   const inputE1 = useRef(null);
   const dispatch = useDispatch();
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   console.log(chatRoomState);
-  console.log(chatLog); 
+  console.log(chatLog);
 
-  let socket = new SockJS("http://localhost:8080/ws");
+  let socket = new SockJS(`${baseURL}/ws`);
   let stompClient = Stomp.over(socket);
 
   const inputChange = (e) => {
@@ -74,7 +75,7 @@ function Chat() {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/chatroom/${chatRoomState.chatRoomId}/messages`,
+        `${baseURL}/chatroom/${chatRoomState.chatRoomId}/messages`,
         {
           method: "GET",
           headers: headers,

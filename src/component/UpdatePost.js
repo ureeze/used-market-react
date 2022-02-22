@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Col,
   Row,
@@ -13,8 +13,10 @@ import { useParams, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import NavicationBar from "./NavicationBar.js";
 
-function UpdatePost() { 
+function UpdatePost() {
   const navigate = useNavigate();
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   const state = useLocation().state;
   const [inputs, setInputs] = useState({
     postTitle: state.post.postTitle,
@@ -71,7 +73,7 @@ function UpdatePost() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+      const response = await fetch(`${baseURL}/posts/${postId}`, {
         method: "PUT",
         headers: headers,
         body: JSON.stringify(inputs),

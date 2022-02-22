@@ -1,6 +1,5 @@
 import { Card, Button, Form, Row, Col } from "react-bootstrap";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -9,8 +8,8 @@ function LoginForm() {
     password: "",
   });
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -26,7 +25,7 @@ function LoginForm() {
 
   const sendRequest = async () => {
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
+      const response = await fetch(`${baseURL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +41,7 @@ function LoginForm() {
         sessionStorage.setItem("userId", json.userId);
         sessionStorage.setItem("email", json.email);
         sessionStorage.setItem("name", json.name);
- 
+
         navigate(`/list`);
       }
     } catch (e) {
@@ -84,7 +83,6 @@ function LoginForm() {
                   onChange={onChange}
                   onKeyUp={(e) => {
                     if (e.key === "Enter") {
-                      // onClick();
                       sendRequest();
                     }
                   }}

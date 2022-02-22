@@ -2,29 +2,29 @@ import { Card, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function Main() {
-  const request = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/oauth2/authorization/google",
-        {
-          method: "GET",
-          mode: "cors",
-        }
-      );
-      const json = await response.json();
-      if (!response.ok) {
-        throw Error("오류가 발생하였습니다.");
-      } else {
-        alert(json);
-      }
-    } catch (e) {
-      alert(e);
-    }
-  };
+  // const request = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       "http://localhost:8080/oauth2/authorization/google",
+  //       {
+  //         method: "GET",
+  //         mode: "cors",
+  //       }
+  //     );
+  //     const json = await response.json();
+  //     if (!response.ok) {
+  //       throw Error("오류가 발생하였습니다.");
+  //     } else {
+  //       alert(json);
+  //     }
+  //   } catch (e) {
+  //     alert(e);
+  //   }
+  // };
   return (
     <Row>
       <Col></Col>
-      <Col xs={7}>
+      <Col xs={10}>
         <Card style={loginForm}>
           <Card.Body>
             <Card.Title>

@@ -23,24 +23,24 @@ function Search() {
     totalElements: "",
     size: "",
   });
-
-  let headers = new Headers({
-    "Content-Type": "application/json",
-    mode: "cors",
-  });
-  const token = sessionStorage.getItem("token");
-  if (token && token !== null) {
-    headers.append("Authorization", "Bearer " + token);
-  }
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   const onChange = (event) => {
     setSearchWord(event.target.value);
   };
 
   const getSearch = async (page, size) => {
+    let headers = new Headers({
+      "Content-Type": "application/json",
+      mode: "cors",
+    });
+    const token = sessionStorage.getItem("token");
+    if (token && token !== null) {
+      headers.append("Authorization", "Bearer " + token);
+    }
     try {
       const response = await fetch(
-        `http://localhost:8080/${searchOption}/all/title?title=` +
+        `${baseURL}/${searchOption}/all/title?title=` +
           searchWord +
           `&page=` +
           page +

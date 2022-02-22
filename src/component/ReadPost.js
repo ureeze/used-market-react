@@ -10,7 +10,7 @@ import {
   Badge,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import NavicationBar from "./NavicationBar.js";
 import DeleteButton from "./DeleteButton.js";
 import UpdateButton from "./UpdateButton.js";
@@ -67,6 +67,7 @@ function ReadPost() {
   };
 
   const { id } = useParams();
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   const getPost = async () => {
     let headers = new Headers({
@@ -77,7 +78,7 @@ function ReadPost() {
       headers.append("Authorization", "Bearer " + token);
     }
     try {
-      const response = await fetch(`http://localhost:8080/posts/${id}`, {
+      const response = await fetch(`${baseURL}/posts/${id}`, {
         method: "GET",
         headers: headers,
       });
@@ -97,7 +98,7 @@ function ReadPost() {
       alert(e);
     }
   };
- 
+
   useEffect(() => {
     getPost();
   }, []);
@@ -356,7 +357,7 @@ function ReadPost() {
               >
                 재고가 존재하지 않습니다.
               </Button>
-            )} 
+            )}
           </Row>
         </Col>
         <Col></Col>
